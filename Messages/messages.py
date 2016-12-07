@@ -2,16 +2,12 @@ import json
 
 class MessagePasrser():
     def parse (self, messages):
-        #parsed_messages = [Message(x["message"]) for x in messages]
-        # Detect tpype of incoming data
-        if type(messages) == type(dict()):
-            #print("It was a dict")
+        # Detect type of incoming data
+        if type(messages) == type(dict()): # Single message
             return [Message(messages)]
+        # Multi message string
         parsed_messages = []
         for message in messages:
-            print("__________________________________")
-            print(message)
-            print("__________________________________")
             parsed_messages.append(Message(message["message"]))    
         return parsed_messages
     
@@ -46,10 +42,9 @@ class Message():
         
     def to_string():
         print (self.origin)
-        
-if __name__ == "__main__":
+ 
 
-    text_message_example = """{"message_id": 77, 
+text_message_example = """{"message_id": 77, 
                         "date": 1481125773, 
                         "text": "asdas", 
                         "from": {"first_name": "Kirill", 
@@ -64,8 +59,8 @@ if __name__ == "__main__":
                                  "last_name": "Kostenkov"
                                 }
                         }"""
-
-    dict_message_example = {'message_id': 77, 
+                        
+dict_message_example = {'message_id': 77, 
                         'date': 1481125773, 
                         'text': 'asdas', 
                         'from': {'first_name': 'Kirill', 
@@ -81,6 +76,7 @@ if __name__ == "__main__":
                                 }
                         }
                         
+if __name__ == "__main__":                       
     print("processing example")
     message = Message(text_message_example);
     print("done")
