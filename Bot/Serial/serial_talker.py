@@ -8,8 +8,17 @@ if __name__ == "__main__":
     print(ser)
     ser.open()
     ser.write(b'4')
-    reads = 10
+    reads = 4
     while reads > 0:
         reads -= 1
         s = ser.readline()
         print("{} {}".format(reads, s))
+    
+    #
+    ser.write(b's')
+    reads = 5
+    while reads > 0:
+        reads -= 1
+        s = ser.readline()
+        print("{} {}".format(reads, s))
+    
