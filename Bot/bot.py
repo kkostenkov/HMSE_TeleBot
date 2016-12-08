@@ -15,7 +15,7 @@ def message_callback(new_messages):
     for message in parsed_messages:
         print ("from: {}{}Message: {}".format( message.from_info.username, os.linesep, message.text))
         
-        callback = palette.callbacks.get(message.text, echo)
+        callback = palette.callbacks.get(message.text, default_answer)
         callback(TelegramBot, message)
     
 def default_answer(bot, message):

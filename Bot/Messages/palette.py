@@ -1,4 +1,4 @@
-
+from serial_talker import serial_talker
 
 def time(bot, message):
     import time
@@ -14,8 +14,9 @@ def my_name(bot, message):
     
 def temperature(bot, message):
     chat_id = message.chat_info.id
-    degrees = 36.6
-    text = "Temperature is {}c".format(degrees)
+    degrees = serial_talker.execute_command('t')
+    #degrees = 36.6
+    text = "Temperature is {}".format(degrees)
     bot.sendMessage(chat_id, text)
 
 callbacks = {
@@ -23,3 +24,4 @@ callbacks = {
             "/myName" : my_name,
             "/temperature" : temperature,
             }
+    
