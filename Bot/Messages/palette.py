@@ -1,4 +1,5 @@
 from serial_talker import serial_talker
+from webcam import shooter
 
 def time(bot, message):
     import time
@@ -19,9 +20,23 @@ def temperature(bot, message):
     text = "Temperature is {}".format(degrees)
     bot.sendMessage(chat_id, text)
 
+def room_photo(bot, message):
+    pic_path = shooter.take_picture()
+    # text notification
+    chat_id = message.chat_info.id
+    text = "Picture taken. Here you go:"
+    bot.sendMessage(chat_id, text)
+    # send file
+    photo=open(pic_path, 'rb')
+    bot.sendPhoto(chat_id, photo)
+    
+
+    
+
 callbacks = {
             "/time" : time,
             "/myName" : my_name,
             "/temperature" : temperature,
+            "/webcam" : room_photo,
             }
     
