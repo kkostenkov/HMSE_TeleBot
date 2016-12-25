@@ -29,7 +29,14 @@ def default_answer(bot, message):
 # Create bot instance with token
 TelegramBot = telepot.Bot(config.BOT_TOKEN)
 # Run bot loop
-TelegramBot.message_loop(message_callback, relax=1, timeout=20, ordered=True, maxhold=3, run_forever=True)
+# relax param is seconds between each call to telegram serv
+TelegramBot.message_loop(message_callback, 
+                         relax=config.server_query_frequency, 
+                         timeout=20, 
+                         ordered=True, 
+                         maxhold=3, 
+                         run_forever=True
+                         )
 
 
 # test ground
