@@ -1,5 +1,8 @@
+from config import serial_initialized
 from serial_talker import serial_talker
 from webcam import shooter
+
+NO_SERIAL_NOTIFICATION = "No connection through serial port. =("
 
 def time(bot, message):
     import time
@@ -15,6 +18,9 @@ def my_name(bot, message):
     
 def temperature(bot, message):
     chat_id = message.chat_info.id
+    if not serial_initialized:
+        bot.sendMessage(chat_id, NO_SERIAL_NOTIFICATION)
+        return
     degrees = serial_talker.execute_command('t')
     #degrees = 36.6
     text = "Temperature is {}".format(degrees)
