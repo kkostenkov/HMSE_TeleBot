@@ -33,8 +33,8 @@ def room_photo(bot, message):
     text = "Picture taken. Here you go:"
     bot.sendMessage(chat_id, text)
     # send file
-    photo=open(pic_path, 'rb')
-    bot.sendPhoto(chat_id, photo)
+    with open(pic_path, 'rb') as photo:
+        bot.sendPhoto(chat_id, photo)
     
 
     
