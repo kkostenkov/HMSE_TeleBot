@@ -19,7 +19,8 @@ def authentificate(fn):
         if sender in admins:
             fn(bot, message)
         else:
-            Messages.palette.non_authorized_answer(bot, message)
+            text = "%s, you're not permitted to execute this command." % message.from_info.username
+            Messages.palette.custom_answer(bot, message.chat_info.id, text)
     return wrapped
     
     

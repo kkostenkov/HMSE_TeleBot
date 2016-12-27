@@ -23,7 +23,7 @@ def my_name(bot, message):
 def temperature(bot, message):
     chat_id = message.chat_info.id
     if not serial_initialized:
-        bot.sendMessage(chat_id, NO_SERIAL_NOTIFICATION)
+        custom_answer(bot, chat_id, NO_SERIAL_NOTIFICATION)
         return
     degrees = serial_talker.execute_command('t')
     #degrees = 36.6
@@ -50,9 +50,7 @@ def default_answer(bot, message):
                     parse_mode=None, disable_web_page_preview=None,
                     disable_notification=None, reply_to_message_id=None, reply_markup=None)    
 
-def non_authorized_answer(bot, message):
-    chat_id = message.chat_info.id
-    text = "%s, you're not permitted to execute this command." % message.from_info.username
+def custom_answer(bot, chat_id, text):
     print (text)
     bot.sendMessage(chat_id, text)                   
 
