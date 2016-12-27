@@ -1,4 +1,4 @@
-from config import admins
+from config import admins, serial_initialized
 import Messages.palette
 
 def notify_admins(fn):
@@ -22,5 +22,13 @@ def authentificate(fn):
             text = "%s, you're not permitted to execute this command." % message.from_info.username
             Messages.palette.custom_answer(bot, message.chat_info.id, text)
     return wrapped
-    
-    
+
+def check_serial_aviability(fn):
+    def wrapped(bot, message):
+        if serial_initialized:
+            fn(bot, message)
+        else:
+            chat_id = message.chat_info.id
+            text = "No connection through serial port. =("
+            Messages.palette.custom_answer(bot, chat_id, text)
+    return wrapped

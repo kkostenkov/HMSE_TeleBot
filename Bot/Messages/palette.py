@@ -1,10 +1,8 @@
 import os
-from Messages.administration  import notify_admins, authentificate
+from Messages.administration  import notify_admins, authentificate, check_serial_aviability
 from config import serial_initialized
 from serial_talker import serial_talker
 from webcam import shooter
-
-NO_SERIAL_NOTIFICATION = "No connection through serial port. =("
 
 @notify_admins
 def time(bot, message):
@@ -19,12 +17,10 @@ def my_name(bot, message):
     text = os.name
     bot.sendMessage(chat_id, text)
 
+@check_serial_aviability
 @notify_admins    
 def temperature(bot, message):
     chat_id = message.chat_info.id
-    if not serial_initialized:
-        custom_answer(bot, chat_id, NO_SERIAL_NOTIFICATION)
-        return
     degrees = serial_talker.execute_command('t')
     #degrees = 36.6
     text = "Temperature is {}".format(degrees)
