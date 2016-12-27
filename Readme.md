@@ -5,5 +5,8 @@
 3. OneWire lib for Arduino IDE  
 4. DallasTemperature.h lib for Arduino http://download.milesburton.com/Arduino/MaximTemperature/
 5. sudo apt-get install fswebcam
+6. sudo apt-get install screen
 
- Run via bot.py
+ Run via
+$ screen python3 Bot/bot.py
+
