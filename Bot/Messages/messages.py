@@ -11,26 +11,21 @@ class MessagePasrser():
             parsed_messages.append(Message(message["message"]))    
         return parsed_messages
     
-
- 
 class Message():
     class ChatInfo():
         def __init__(self, chat_info):
             self.id = chat_info["id"]
             self.username = chat_info.get("username", "None")
-            self.first_name = chat_info["first_name"]
-            self.last_name = chat_info["last_name"]
-            self.type = chat_info["type"]  
+            self.first_name = chat_info.get("first_name", "")
+            self.last_name = chat_info.get("last_name", "")
+            self.type = chat_info.get("type", "")
     
     class FromInfo():
         def __init__(self, from_info):
             self.id = from_info["id"]
             self.username = from_info.get("username", "None")
-            self.first_name = from_info["first_name"]
-            if ("last_name" in from_info):
-                self.last_name = from_info["last_name"]
-            else: 
-                self.last_name = ""
+            self.first_name = from_info.get("first_name", "")
+            self.last_name = from_info.get("last_name", "")
 
     def __init__(self, message):
         self.origin = message
