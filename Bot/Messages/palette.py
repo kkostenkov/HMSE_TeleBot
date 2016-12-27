@@ -52,7 +52,7 @@ def custom_answer(bot, chat_id, text):
 
 callbacks = {
             "/time" : time,
-            "/myName" : my_name,
+            "/myname" : my_name,
             "/temperature" : temperature,
             "/webcam" : room_photo,
             }
