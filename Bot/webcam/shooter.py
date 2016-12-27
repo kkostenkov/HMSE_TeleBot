@@ -3,18 +3,16 @@ import subprocess
 import time
 
 def take_picture_nix():
-    pic_path = "/home/kkostenkov/Pictures/webcam.jpeg"
+    pic_path = "/home/pi/Pictures/webcam.jpeg"
     command = "fswebcam"
     resolution = "-r 640*480"
     delay = "-D0.1"
     skip_frames = "-S1"
-    title = "Koss home"
     # exec command
     process = subprocess.call([command, 
                                delay, 
                                skip_frames, 
                                resolution,
-                               title,
                                pic_path
                                ])
     #process.wait()
