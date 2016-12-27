@@ -27,7 +27,10 @@ class Message():
             self.id = from_info["id"]
             self.username = from_info.get("username", "None")
             self.first_name = from_info["first_name"]
-            self.last_name = from_info["last_name"]
+            if ("last_name" in from_info):
+                self.last_name = from_info["last_name"]
+            else: 
+                self.last_name = ""
 
     def __init__(self, message):
         self.origin = message
