@@ -1,4 +1,4 @@
-from config import admins, serial_initialized
+import config
 import Messages.palette
 
 def notify_admins(fn):
@@ -7,7 +7,7 @@ def notify_admins(fn):
         action = message.text
         chat_id = message.chat_info.id
         
-        for admin in admins:
+        for admin in config.admins:
             print ("Notify %s of \n %s asked for %s" % (admin, sender, action)) # !TODO  messaging notifications
         fn(bot, message)
     return wrapped
@@ -16,7 +16,7 @@ def notify_admins(fn):
 def authentificate(fn):
     def wrapped(bot, message):
         sender = message.from_info.username
-        if sender in admins:
+        if sender in config.admins:
             fn(bot, message)
         else:
             text = "%s, you're not permitted to execute this command." % message.from_info.username
@@ -25,7 +25,7 @@ def authentificate(fn):
 
 def check_serial_aviability(fn):
     def wrapped(bot, message):
-        if serial_initialized:
+        if config.serial_initialized:
             fn(bot, message)
         else:
             chat_id = message.chat_info.id

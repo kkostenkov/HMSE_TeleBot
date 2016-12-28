@@ -3,14 +3,14 @@ import config
 import serial
 
 
-def start_serial_port():
-    ser = serial.Serial()
+def start_serial_port(ser):
     ser.baudrate = 9600
-    ser.port = 'COM3'
+    ser.port = config.get_serial_port()
     ser.timeout = 2.0 # Give time to read all init messages.
     print(ser)
     try:
         ser.open()
+        config.serial_initialized = True
     except:
         print("Serial port opening failed.")
         config.serial_initialized = False
@@ -27,10 +27,11 @@ def start_serial_port():
 def execute_command(command):
     ser.write(command.encode())
     response = ser.readline().decode();
+    print(response)
     return response;
     
-
-start_serial_port()
+ser = serial.Serial()
+start_serial_port(ser)
 
 if __name__ == "__main__":
     
