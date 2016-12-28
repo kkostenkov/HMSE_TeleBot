@@ -15,7 +15,7 @@ DeviceAddress insideThermometer;
 
 // ________________ Timers ________________________
 unsigned long lastTempCheckTime;
-int tempCheckDelay = 60000; // 60 sec
+int tempCheckDelay = 30000; // 30 sec
 // ________________________________________________
 
 // ________________ Sensor values ________________
@@ -66,7 +66,6 @@ void loop()
   {
     refreshTemperatureData();
     lastTempCheckTime = now;
-    Serial.println(temperature);
   }
 
   // ______ Sleep _______
