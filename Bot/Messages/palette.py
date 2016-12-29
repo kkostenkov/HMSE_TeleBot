@@ -1,6 +1,7 @@
 import os
 from Messages.administration  import notify_admins, authentificate, check_serial_aviability
 from config import serial_initialized
+from data import users
 from serial_talker import serial_talker
 from webcam import shooter
 
@@ -39,6 +40,12 @@ def room_photo(bot, message):
         bot.sendPhoto(chat_id, photo)
     
 
+def subscribe_to_notifications(bot, message):
+    chat_id = message.chat_info.id
+    users.add_subscriber(message.from_info.username, chat_id)
+    text = "Subscribed"
+    bot.sendMessage(chat_id, text)
+    
 def default_answer(bot, message):
     chat_id = message.chat_info.id
     text = "I read you {}. No callback found for {}".format(message.from_info.username,  str(message.text))
@@ -55,5 +62,6 @@ callbacks = {
             "/myname" : my_name,
             "/temperature" : temperature,
             "/webcam" : room_photo,
+            "/subscribe" : subscribe_to_notifications,
             }
     

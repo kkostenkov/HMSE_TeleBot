@@ -1,14 +1,14 @@
 import config
+from data import users
 import Messages.palette
 
 def notify_admins(fn):
     def wrapped(bot, message):
         sender = message.from_info.username
         action = message.text
-        chat_id = message.chat_info.id
-        
-        for admin in config.admins:
-            print ("Notify %s of \n %s asked for %s" % (admin, sender, action)) # !TODO  messaging notifications
+        text = "%s asked for %s" % (sender, action)
+        for admin, admin_chat_id in users.get_subscribers().items():
+            Messages.palette.custom_answer(bot, admin_chat_id, text)
         fn(bot, message)
     return wrapped
     
