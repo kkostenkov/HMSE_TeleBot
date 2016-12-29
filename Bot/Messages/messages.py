@@ -38,8 +38,8 @@ class Message():
         self.chat_info = self.ChatInfo(message["chat"])
         self.from_info = self.FromInfo(message["from"])
         
-    def to_string():
-        print (self.origin)
+    def __str__(self):
+        return str(self.origin)
  
 
 text_message_example = """{"message_id": 77, 
