@@ -40,6 +40,8 @@ def room_photo(bot, message):
         bot.sendPhoto(chat_id, photo)
     
 
+@authentificate
+@notify_admins
 def subscribe_to_notifications(bot, message):
     chat_id = message.chat_info.id
     users.add_subscriber(message.from_info.username, chat_id)

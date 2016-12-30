@@ -5,10 +5,29 @@ import serial
 import threading
 import time
 
+from Messages.administration import alarm
+
 serial_read_frequency = 0.5 # seconds
 status_query_frequency = 10 # seconds
 status_request_command = "r"
 status = {}
+last_statuses = {"doorClosed": 1}
+
+
+## Testing Purouses ___________________
+
+def on_new_status_parsed():
+    new_door_status = status.get("doorClosed")
+    if (new_door_status == None): 
+        print("Door info not in status")
+        return
+    if new_door_status != last_statuses["doorClosed"]:
+        text = "door is open: %d" % new_door_status
+        print(text)
+        alarm(text)
+        last_statuses["doorClosed"] = new_door_status
+## _____________________________       
+
 
 def parse_serial_message(message):
     if len(message) == 0:
@@ -22,6 +41,8 @@ def parse_serial_message(message):
     # Merge into status
     for key, value in parsed_message.items():
         status[key] = value
+    on_new_status_parsed()
+    
 
 def serial_listener_loop(ser):
     print("Serial listener loop launched.")
@@ -55,6 +76,10 @@ def start_serial_port(ser):
     config.serial_initialized = True
 
 def execute_command(command):
+    if (command == "/t"):
+        return status["temp"]
+    print("SERIAL STUB HERE")
+    return
     ser.write(command.encode())
     response = ser.readline().decode();
     print(response)
@@ -77,7 +102,6 @@ if config.serial_initialized:
     worker.start()
 
 if __name__ == "__main__":
-    
     ser.write(b'4')
     reads = 4
     while reads > 0:
@@ -92,4 +116,4 @@ if __name__ == "__main__":
         reads -= 1
         s = ser.readline()
         print("{} {}".format(reads, s))
-    
+   

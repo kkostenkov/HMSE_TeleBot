@@ -12,9 +12,16 @@ def notify_admins(fn):
         fn(bot, message)
     return wrapped
     
+
+known_bot = [None,]
     
 def authentificate(fn):
     def wrapped(bot, message):
+        # register bot
+        if (known_bot[0] == None):
+            print("registered bot")
+            known_bot[0] = bot
+        #
         sender = message.from_info.username
         if sender in config.admins:
             fn(bot, message)
@@ -32,3 +39,12 @@ def check_serial_aviability(fn):
             text = "No connection through serial port. =("
             Messages.palette.custom_answer(bot, chat_id, text)
     return wrapped
+
+    
+def alarm(text):
+    if (known_bot[0] == None): 
+        print("NO registered bot")
+        return
+    for admin, admin_chat_id in users.get_subscribers().items():
+            Messages.palette.custom_answer(known_bot[0], admin_chat_id, text)
+    
