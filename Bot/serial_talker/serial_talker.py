@@ -1,5 +1,6 @@
 #!/usr/bin/pyhton3
 import config
+import json
 import serial
 import threading
 import time
@@ -7,18 +8,33 @@ import time
 serial_read_frequency = 0.5 # seconds
 status_query_frequency = 10 # seconds
 status_request_command = "r"
+status = {}
+
+def parse_serial_message(message):
+    if len(message) == 0:
+        return
+    try:
+        parsed_message = json.loads(message)
+    except:
+        print("Arduino system message: %s" % message)
+        return
+    print (parsed_message)
+    # Merge into status
+    for key, value in parsed_message.items():
+        status[key] = value
 
 def serial_listener_loop(ser):
     print("Serial listener loop launched.")
     while True:
         time.sleep(serial_read_frequency)
         serial_message = ser.readline().decode();
+        parse_serial_message(serial_message)
         while len(serial_message) != 0:
-            print(serial_message)
             serial_message = ser.readline().decode()
+            parse_serial_message(serial_message)
 
 def status_query_loop(ser):
-    print("status query loop launched.")
+    print("Status query loop launched.")
     status_query = status_request_command.encode()
     while True:
         time.sleep(status_query_frequency)
