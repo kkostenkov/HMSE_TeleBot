@@ -1,8 +1,29 @@
 #!/usr/bin/pyhton3
 import config
 import serial
+import threading
+import time
 
+serial_read_frequency = 0.5 # seconds
+status_query_frequency = 10 # seconds
+status_request_command = "r"
 
+def serial_listener_loop(ser):
+    print("Serial listener loop launched.")
+    while True:
+        time.sleep(serial_read_frequency)
+        serial_message = ser.readline().decode();
+        while len(serial_message) != 0:
+            print(serial_message)
+            serial_message = ser.readline().decode()
+
+def status_query_loop(ser):
+    print("status query loop launched.")
+    status_query = status_request_command.encode()
+    while True:
+        time.sleep(status_query_frequency)
+        ser.write(status_query)
+            
 def start_serial_port(ser):
     ser.baudrate = 9600
     ser.port = config.get_serial_port()
@@ -10,17 +31,10 @@ def start_serial_port(ser):
     print(ser)
     try:
         ser.open()
-        config.serial_initialized = True
     except:
         print("Serial port opening failed.")
         config.serial_initialized = False
         return
-    init_message = ser.readline()
-
-    while len(init_message) != 0:
-        print(len(init_message))
-        print(init_message)
-        init_message = ser.readline()
     print("Serial port opened.")
     config.serial_initialized = True
 
@@ -32,6 +46,19 @@ def execute_command(command):
     
 ser = serial.Serial()
 start_serial_port(ser)
+if config.serial_initialized:    
+    # serial_listener_loop
+    worker = threading.Thread(target=serial_listener_loop,
+                              args=(ser,)
+                              )
+    worker.setDaemon(True)
+    worker.start()
+    # status_query_loop
+    worker = threading.Thread(target=status_query_loop,
+                              args=(ser,)
+                              )
+    worker.setDaemon(True)
+    worker.start()
 
 if __name__ == "__main__":
     
