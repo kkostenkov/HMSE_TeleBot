@@ -13,22 +13,36 @@ DallasTemperature sensors(&oneWire);
 DeviceAddress insideThermometer;
 // ________________________________________________
 
+// ________________ Pins ________________________
+const int DOOR_SENSOR_PIN  = 3;
+// ________________________________________________
+
 // ________________ Timers ________________________
 unsigned long lastTempCheckTime;
 int tempCheckDelay = 30000; // 30 sec
+unsigned long lastDoorCheckTime;
+int doorCheckDelay = 1000; // 1 sec
+unsigned long lastFullReportTime;
+int fullReportDelay = 30000; // 30 sec
+
 // ________________________________________________
 
 // ________________ Sensor values ________________
 float temperature;
+bool doorIsClosed;
+bool doorWasClosed;
 // _______________________________________________
 
 // Command codes
 const String C_STATUS = "s";
 const String T_STATUS = "t";
+const String R_STATUS = "r";
 
 void setup()
 {
   Serial.begin(9600);
+
+  
   
   // _______ OneWire ________
   // locate devices on the bus
@@ -48,6 +62,11 @@ void setup()
   // _________________ Prepare inital sensor data _______
   refreshTemperatureData();
   lastTempCheckTime = millis();
+  doorWasClosed = true;
+  refreshDoorStatusData();
+  lastDoorCheckTime = millis();
+  makeFullReport();
+  lastFullReportTime = millis();
   //
 
 }
@@ -62,10 +81,24 @@ void loop()
 
   // ______ Timers ______
   unsigned long now = millis();
+  // temp
   if (lastTempCheckTime + tempCheckDelay < now)
   {
     refreshTemperatureData();
     lastTempCheckTime = now;
+  }
+  // door
+  if (lastDoorCheckTime + doorCheckDelay < now)
+  {
+    refreshDoorStatusData();
+    lastDoorCheckTime = now;
+  }
+
+  // full report
+  if (lastFullReportTime + fullReportDelay < now)
+  {
+    //makeFullReport(); // Not sending explicitly before python code supports.
+    lastFullReportTime = now;
   }
 
   // ______ Sleep _______
@@ -80,9 +113,13 @@ void parseCommand(String command)
   {
     Serial.println("Status report: OK");
   }
-  else if (command = T_STATUS)
+  else if (command == T_STATUS)
   {
     Serial.println(temperature);
+  }
+  else if (command == R_STATUS)
+  {
+    makeFullReport();
   }
   else 
   {
@@ -90,6 +127,15 @@ void parseCommand(String command)
   }
 }
 
+//  ________________ FULL REPORT____________________
+void makeFullReport()
+{
+  String report = "{ \"temp\" : " + String(temperature) + ", \"doorClosed\" : " + String(doorIsClosed) +" }";
+  Serial.println(report); 
+}
+//  ________________________________________________
+
+//  ________________ TEMP____________________
 void refreshTemperatureData()
 {
   temperature = requestTemperature(insideThermometer);
@@ -102,4 +148,15 @@ float requestTemperature(DeviceAddress deviceAddress)
   return tempC;
 }
 
+// _________________DOOR__________________
+void refreshDoorStatusData()
+{
+  //int doorSensorValue = digitalRead(DOOR_SENSOR_PIN);
+  doorIsClosed = digitalRead(DOOR_SENSOR_PIN) > 0.5f;
+  if (doorIsClosed != doorWasClosed)
+    {    
+      Serial.println("{ \"doorClosed\" : " + String(doorIsClosed) + " }");
+      doorWasClosed = doorIsClosed;
+    }
+}
 
