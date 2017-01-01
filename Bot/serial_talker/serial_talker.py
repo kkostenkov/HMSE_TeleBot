@@ -7,7 +7,7 @@ import time
 
 from Messages.administration import alarm
 
-serial_read_frequency = 0.5 # seconds
+serial_read_frequency = 0.1 # seconds
 status_query_frequency = 10 # seconds
 status_request_command = "r"
 status = {}
@@ -17,15 +17,16 @@ last_statuses = {"doorClosed": 1}
 ## Testing Purouses ___________________
 
 def on_new_status_parsed():
-    new_door_status = status.get("doorClosed")
-    if (new_door_status == None): 
+    new_door_closed_status = status.get("doorClosed")
+    if (new_door_closed_status == None): 
         print("Door info not in status")
         return
-    if new_door_status != last_statuses["doorClosed"]:
-        text = "door is open: %d" % new_door_status
+    if not new_door_closed_status and last_statuses["doorClosed"]:
+        text = "Door opened"
         print(text)
         alarm(text)
-        last_statuses["doorClosed"] = new_door_status
+    last_statuses["doorClosed"] = new_door_closed_status
+        
 ## _____________________________       
 
 

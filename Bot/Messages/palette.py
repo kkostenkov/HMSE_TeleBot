@@ -13,7 +13,6 @@ def set_bot(new_bot):
 
 @notify_admins
 def time(message):
-    print(telegramBot[0])
     import time
     chat_id = message.chat_info.id
     text = str(time.time())
