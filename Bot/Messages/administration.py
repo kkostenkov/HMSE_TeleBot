@@ -3,48 +3,37 @@ from data import users
 import Messages.palette
 
 def notify_admins(fn):
-    def wrapped(bot, message):
+    def wrapped(message):
         sender = message.from_info.username
         action = message.text
         text = "%s asked for %s" % (sender, action)
         for admin, admin_chat_id in users.get_subscribers().items():
-            Messages.palette.custom_answer(bot, admin_chat_id, text)
-        fn(bot, message)
+            Messages.palette.custom_answer(admin_chat_id, text)
+        fn(message)
     return wrapped
     
-
-known_bot = [None,]
-    
 def authentificate(fn):
-    def wrapped(bot, message):
-        # register bot
-        if (known_bot[0] == None):
-            print("registered bot")
-            known_bot[0] = bot
-        #
+    def wrapped(message):
         sender = message.from_info.username
         if sender in config.admins:
-            fn(bot, message)
+            fn(message)
         else:
             text = "%s, you're not permitted to execute this command." % message.from_info.username
-            Messages.palette.custom_answer(bot, message.chat_info.id, text)
+            Messages.palette.custom_answer(message.chat_info.id, text)
     return wrapped
 
 def check_serial_aviability(fn):
-    def wrapped(bot, message):
+    def wrapped(message):
         if config.serial_initialized:
-            fn(bot, message)
+            fn(message)
         else:
             chat_id = message.chat_info.id
             text = "No connection through serial port. =("
-            Messages.palette.custom_answer(bot, chat_id, text)
+            Messages.palette.custom_answer(chat_id, text)
     return wrapped
 
     
 def alarm(text):
-    if (known_bot[0] == None): 
-        print("NO registered bot")
-        return
     for admin, admin_chat_id in users.get_subscribers().items():
-            Messages.palette.custom_answer(known_bot[0], admin_chat_id, text)
+            Messages.palette.custom_answer(admin_chat_id, text)
     
