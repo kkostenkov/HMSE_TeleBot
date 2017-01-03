@@ -1,6 +1,7 @@
 import os
 import subprocess
-#import config
+import threading
+from queue import Queue
 
 def ip_is_online(ip):
     try:
@@ -27,19 +28,33 @@ def ip_is_online(ip):
         
     #print("%s, down" % ip)    
     return False  
-    
-def scan_ip_range(ip_range):
-    alive_hosts = []
-    online_macs = []
-    for IPAdress in ip_range:
-        # !TODO Validate ip
-        if ip_is_online(IPAdress): # !TODO multithread
+
+def scan_ip(ip_queue, online_macs):
+    IPAdress = ip_queue.get()
+    if ip_is_online(IPAdress):
             #print("%s is alive" % IPAdress)
-            alive_hosts.append(IPAdress)
             mac = get_mac(IPAdress)
             if (mac):
                 #print(mac)
                 online_macs.append(mac)
+    ip_queue.task_done()
+    
+def scan_ip_range(ip_range):
+    online_macs = []
+    TESTING_THREADS_ALLOWED = len(ip_range)
+    ip_queue = Queue(TESTING_THREADS_ALLOWED)
+    # Spawn threads
+    for IPAdress in ip_range:
+        # !TODO Validate ip
+        ip_queue.put(IPAdress)
+        worker = threading.Thread(target=scan_ip,
+                                  args=(ip_queue, online_macs)
+                                  )
+        worker.setDaemon(True)
+        worker.start()
+    #print("waiting all threads...")
+    ip_queue.join()
+    #print("all threads done")
     return online_macs
 
 def get_mac(ip):
