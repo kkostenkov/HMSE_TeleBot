@@ -25,7 +25,7 @@ def ip_is_online(ip):
                     #self.Status = Exp[3].replace(' ms', '')
                     return True
         
-    print("%s, down" % ip)    
+    #print("%s, down" % ip)    
     return False  
     
 def scan_ip_range(ip_range):
@@ -34,11 +34,11 @@ def scan_ip_range(ip_range):
     for IPAdress in ip_range:
         # !TODO Validate ip
         if ip_is_online(IPAdress): # !TODO multithread
-            print("%s is alive" % IPAdress)
+            #print("%s is alive" % IPAdress)
             alive_hosts.append(IPAdress)
             mac = get_mac(IPAdress)
             if (mac):
-                print(mac)
+                #print(mac)
                 online_macs.append(mac)
     return online_macs
 
