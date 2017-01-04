@@ -1,6 +1,7 @@
 from lanscan.lanscan import *
 
 known_online_hosts = [[],]
+scan_frequency = 10 # default
 
 def get_online_hosts():
     ip_range = ["192.168.100." + str(a) for a in range(20)]
@@ -44,7 +45,6 @@ def diff():
             "disappeared" : disappeared_hosts,
             }
 
-scan_frequency = 10 # once every %scan_frequency% seconds 
 def lanscan_loop(event_handler):
     # do job
     #print("getting diff")
@@ -68,7 +68,9 @@ def lanscan_loop(event_handler):
     t.daemon = True
     t.start()
 
-def run_lanscan_loop(event_handler):
+def run_lanscan_loop(event_handler, config_scan_frequency):
+    global scan_frequency 
+    scan_frequency = config_scan_frequency
     lanscan_loop(event_handler)
 
 

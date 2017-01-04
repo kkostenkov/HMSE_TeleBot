@@ -1,11 +1,6 @@
-from enum import Enum
 from Messages.administration import alarm
 from speech import speech
 import time
-
-class EventType(Enum):
-    nothing = 0
-    new_mac = 1
 
 class HomeEventHandler:
     events = {}
@@ -44,9 +39,10 @@ def new_mac_found(args):
         return
     was_last_online = last_online[username]
     now = time.time()
-    if (was_last_online < now - max_offline_time ):
+    if (was_last_online != 0 and was_last_online < now - max_offline_time ):
         # user was offline for too long. Worth notifying.
-        text = "%s found online. Last online time: %s" % (username, str(was_last_online))
+        human_readable_time = time.asctime(time.gmtime(was_last_online))
+        text = "%s found online. Last online time: %s" % (username, human_readable_time)
         speech.ding()
         print (text)
         alarm(text)
@@ -54,12 +50,12 @@ def new_mac_found(args):
 
 def mac_lost(args):
     mac = tuple(args[0])
-    user = known_macs.get(mac, None)    
-    if (not user):
+    username = known_macs.get(mac, None)    
+    if (not username):
         #print("Unknown mac lost")
         return
-    #text = user + " lost connection"
+    text = username + " lost connection"
     #speech.ding()
-    #print (text)
+    print (text)
     #alarm(text)
     last_online[username] = time.time()

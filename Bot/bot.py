@@ -33,7 +33,8 @@ from events import HomeEventHandler
 event_handler = HomeEventHandler()
                              
 import lanscan
-lanscan.run_lanscan_loop(event_handler)                             
+from config import wifi_scan_frequency
+lanscan.run_lanscan_loop(event_handler, wifi_scan_frequency)                             
                              
 launch_bot_thread()
 #worker = threading.Thread(target=launch_bot_thread,
