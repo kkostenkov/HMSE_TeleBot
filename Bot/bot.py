@@ -28,13 +28,12 @@ def launch_bot_thread():
                              maxhold=3, 
                              run_forever=True
                              )
-       
 
-
-worker = threading.Thread(target=launch_bot_thread,
+launch_bot_thread()
+#worker = threading.Thread(target=launch_bot_thread,
                                   #args=()
-                                  )
+#                                  )
 #worker.setDaemon(True)
-worker.start()
+#worker.start()
 
 

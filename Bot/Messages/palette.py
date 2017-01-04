@@ -3,6 +3,7 @@ from Messages.administration  import notify_admins, authentificate, check_serial
 from config import serial_initialized
 from data import users
 from serial_talker import serial_talker
+from speech import speech
 from webcam import shooter
 
 telegramBot = [None, ]
@@ -22,8 +23,8 @@ def time(message):
 def my_name(message):
     chat_id = message.chat_info.id    
     text = os.name
-    telegramBot[0].sendMessage(chat_id, text)
-
+    telegramBot[0].sendMessage(chat_id, text)    
+    
 @check_serial_aviability
 @notify_admins    
 def temperature(message):
@@ -33,6 +34,13 @@ def temperature(message):
     text = "Temperature is {}".format(degrees)
     telegramBot[0].sendMessage(chat_id, text)
 
+def test_audio(message):
+    chat_id = message.chat_info.id
+    text = "Testing speech module."
+    telegramBot[0].sendMessage(chat_id, text)
+    speech.say("welcome")    
+    
+    
 @authentificate
 @notify_admins
 def room_photo(message):
@@ -66,10 +74,11 @@ def custom_answer(chat_id, text):
     telegramBot[0].sendMessage(chat_id, text)                   
 
 callbacks = {
-            "/time" : time,
             "/myname" : my_name,
             "/temperature" : temperature,
-            "/webcam" : room_photo,
+            "/test_audio" : test_audio,
+            "/time" : time,
             "/subscribe" : subscribe_to_notifications,
+            "/webcam" : room_photo,
             }
     
