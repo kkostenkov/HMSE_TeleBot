@@ -21,4 +21,4 @@ def say(phrase):
         cmd = ["mpg321", file_path] # adjust volume here
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
         # Wait for file to be played
-        subprocess.wait()
+        p.wait()
