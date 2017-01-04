@@ -38,7 +38,7 @@ def test_audio(message):
     chat_id = message.chat_info.id
     text = "Testing speech module."
     telegramBot[0].sendMessage(chat_id, text)
-    speech.say("welcome")    
+    speech.ding()    
     
     
 @authentificate

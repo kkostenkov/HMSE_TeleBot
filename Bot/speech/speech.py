@@ -7,6 +7,7 @@ print ("Resources are: " + resources_path)
 
 filenames = {
            "welcome" : "welcome_home.mp3",
+           "ding" : "ding.mp3",
            }
 
 def say(phrase):
@@ -22,3 +23,6 @@ def say(phrase):
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
         # Wait for file to be played
         p.wait()
+
+def ding():
+    say("ding")
