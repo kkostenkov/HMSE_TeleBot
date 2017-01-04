@@ -63,7 +63,13 @@ def get_mac(ip):
     X = '([a-fA-F0-9]{2}[:|\-]?){6}' 
     a = re.compile(X).search(get)
     if a:
-        return (get[a.start(): a.end()])
+        mac_s =  (get[a.start(): a.end()])
+        if os.name == "nt":
+            sep = "-"
+        else:
+            sep = ":"
+        mac = (mac_s.split(sep))
+        return mac
               
 if __name__ == "__main__":
     ip_range = ["192.168.100." + str(a) for a in range(15)]

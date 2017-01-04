@@ -29,6 +29,12 @@ def launch_bot_thread():
                              run_forever=True
                              )
 
+from events import HomeEventHandler
+event_handler = HomeEventHandler()
+                             
+import lanscan
+lanscan.run_lanscan_loop(event_handler)                             
+                             
 launch_bot_thread()
 #worker = threading.Thread(target=launch_bot_thread,
                                   #args=()

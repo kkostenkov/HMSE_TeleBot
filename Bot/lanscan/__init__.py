@@ -1,4 +1,4 @@
-from lanscan import *
+from lanscan.lanscan import *
 
 known_online_hosts = [[],]
 
@@ -45,32 +45,30 @@ def diff():
             }
 
 scan_frequency = 10 # once every %scan_frequency% seconds 
-def lanscan_loop():
+def lanscan_loop(event_handler):
     # do job
-    print("getting diff")
+    #print("getting diff")
     diff_info = diff()
-    print("got diff.")
+    #print("got diff.")
     new_users = diff_info.get("new", None)
     if (new_users):
-        print("new:")
+        #print("new:")
         for user in new_users:
-            print(user + " apeared")
+            #print(user + " apeared")
+            event_handler.call("new_mac_found", [user])
     disappeared_users = diff_info.get("disappeared", None)
     if (disappeared_users):
-        print("old:")
-        for user in disappeared:
-            print(user + " disappeared")
+        #print("old:")
+        for user in disappeared_users:
+            #print(user + " disappeared")
+            event_handler.call("mac_lost", [user])
+            continue
     # scedule itself
-    t = threading.Timer(scan_frequency, lanscan_loop)
+    t = threading.Timer(scan_frequency, lanscan_loop, [event_handler])
     t.daemon = True
     t.start()
 
-def run_lanscan_loop():
-    lanscan_loop()
+def run_lanscan_loop(event_handler):
+    lanscan_loop(event_handler)
 
 
-if __name__ == "__main__":
-    run_lanscan_loop()
-    import time
-    while(True):
-        time.sleep(10)
