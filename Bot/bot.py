@@ -3,6 +3,8 @@ import config
 import threading
 import telepot
 
+
+import lanscan
 from Messages import messages, palette
 
 def message_callback(new_messages):
@@ -29,18 +31,10 @@ def launch_bot_thread():
                              run_forever=True
                              )
 
-from events import HomeEventHandler
+from events import HomeEventHandler # don't move this import up
 event_handler = HomeEventHandler()
-                             
-import lanscan
-from config import wifi_scan_frequency
-lanscan.run_lanscan_loop(event_handler, wifi_scan_frequency)                             
-                             
+lanscan.run_lanscan_loop(event_handler)                             
 launch_bot_thread()
-#worker = threading.Thread(target=launch_bot_thread,
-                                  #args=()
-#                                  )
-#worker.setDaemon(True)
-#worker.start()
+
 
 
