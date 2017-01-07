@@ -29,7 +29,7 @@ last_online = {
                "Keeps" : 0,
                "Victory" : 0,
                }
-max_offline_time = 600 # seconds              
+max_offline_time = 60 * 120  # seconds              
 
 def new_mac_found(args):
     mac = tuple(args[0])
@@ -58,4 +58,3 @@ def mac_lost(args):
     #speech.ding()
     print (text)
     #alarm(text)
-    last_online[username] = time.time()
