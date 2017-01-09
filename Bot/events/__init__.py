@@ -22,12 +22,12 @@ class HomeEventHandler:
 
 
 known_macs = { 
-              ("38", "a4", "ed", "05", "bd", "02") : "Keeps",
-              ("f8", "27", "93", "30", "5a", "ca") : "Victory",
+              ("38", "a4", "ed", "05", "bd", "02") : "kirill",
+              ("f8", "27", "93", "30", "5a", "ca") : "vika",
               }
 last_online = {
-               "Keeps" : 0,
-               "Victory" : 0,
+               "kirill" : 0,
+               "vika" : 0,
                }
 max_offline_time = 60 * 120  # seconds              
 
@@ -41,11 +41,17 @@ def new_mac_found(args):
     now = time.time()
     if (was_last_online != 0 and was_last_online < now - max_offline_time ):
         # user was offline for too long. Worth notifying.
-        human_readable_time = time.asctime(time.gmtime(was_last_online))
+        
+        gmtime = time.gmtime(was_last_online)
+        human_readable_time = time.asctime(gmtime)
         text = "%s found online. Last online time: %s" % (username, human_readable_time)
-        speech.ding()
-        print (text)
+        # Message
         alarm(text)
+        # Text
+        print (text)
+        # Voice
+        speech.greet_with_daypart()
+        speech.say(username)
     last_online[username] = now
 
 def mac_lost(args):
@@ -58,3 +64,4 @@ def mac_lost(args):
     #speech.ding()
     print (text)
     #alarm(text)
+

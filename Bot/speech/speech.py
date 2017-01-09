@@ -1,5 +1,6 @@
 import os 
 import subprocess
+import time
 
 base_path = os.path.split(os.path.split(os.path.realpath(__file__))[0])[0] # Two levels up
 resources_path = os.path.join(base_path, "Resources")
@@ -37,3 +38,22 @@ def say(phrase):
 
 def ding():
     say("ding")
+    
+def greet_with_daypart():
+    now = time.time()
+    gmtime = time.gmtime(was_last_online)
+    h = gmtime.tm_hour
+    if (6 <= h < 12):
+        say("good_morning")
+        return
+    if (12 <= h < 18):
+        say("good_day")
+    if (18 <= h < 24) or (0 <= h < 2):
+        say("good_evening")
+
+
+if __name__ == "__main__":
+    say("ding")
+    say("good_morning")
+    say("good_day")
+    say("good_evening")
