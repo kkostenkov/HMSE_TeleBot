@@ -6,8 +6,19 @@ resources_path = os.path.join(base_path, "Resources")
 print ("Resources are: " + resources_path)
 
 filenames = {
-           "welcome" : "welcome_home.mp3",
+           "cold" : "cold.wav",
            "ding" : "ding.mp3",
+           "frost" : "frost.wav",
+           "good_day" : "good_day.wav",
+           "good_evening" : "good_evening.wav",
+           "good_morning" : "good_morning.wav",
+           "have_a_good_day" : "have_a_good_day.wav",
+           "kirill" : "kirill.wav",
+           "outdoors" : "outdoors.wav",
+           "vika" : "vika.wav",
+           "welcome" : "welcome.wav",
+           "welcome_home" : "welcome_home.mp3",
+           #"" : ".wav",
            }
 
 def say(phrase):
