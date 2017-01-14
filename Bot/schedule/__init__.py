@@ -6,8 +6,8 @@
 # Should reschedule itself if it is an repeating event.
 #
 
-import threading
-from event_data import EventData
+import threading, time
+from schedule.event_data import EventData
 
 
 class Schedule():
@@ -22,14 +22,9 @@ class Schedule():
         
     def remove(self, event):
         self.scheduled_events.remove(event)
-
-    def load_event_from_dict(self):
-        pass
         
     def schedule_loop(self):
-        # Check for events to fire
         self.check_events()
-        # Schedule itself
         t = threading.Timer(self.loop_frequency, self.schedule_loop)
         #t.daemon = True
         t.start()
@@ -39,16 +34,13 @@ class Schedule():
         print(".")
         for event in self.scheduled_events:
             if event.next_fire_time < now:
-                self.fire_event(event)
+                if event.action:
+                    event.action()
                 if event.repeat_interval:
                     print("Requeued")
                     event.next_fire_time += event.repeat_interval
                 else:
                     self.remove(event)
-                
-    def fire_event(self, event):
-        print("%s \n Event fired: %s \n %s" % (time.asctime(), event.header, event.message))
-
 
 
 if __name__ == "__main__":
@@ -56,17 +48,45 @@ if __name__ == "__main__":
     import time
     e = EventData("Caption!",
                   "This is first text notification.",
-                  time.time() + 2, # Seconds
+                  time.time() + 50, # Seconds
                   )
     e2 = EventData("Re!",
                   "This is repeating notification.",
-                  time.time() + 3, # Seconds
-                  repeat_interval=2
-                  ) 
-    sch = Schedule()
-    sch.add(e)
-    sch.add(e2)
+                  time.time() + 50,
+                  repeat_interval=10
+                  )
+                  
+    def sample_test_callback(): print("ACTIOOOON!")
     
+    e3 = EventData("Action!",
+                  "Let's call some func.",
+                  time.time() + 20,
+                  #repeat_interval=10,
+                  callback = sample_test_callback
+                  )
+    e4 = EventData("lambda action!",
+                  "Let's call some stored lambda.", 
+                  time.time() + 30, 
+                  #repeat_interval=2, 
+                  callback = lambda:  print("lambda called") 
+                  )
+    someData = EventData("data STAYS the same", "data text to lambda", time.time() + 1)
+    e5 = EventData("lambda action with args!",
+                  "Let's call some stored lambda with args.", 
+                  time.time() + 1, 
+                  repeat_interval=2, 
+                  callback = lambda :  print(someData.header)
+                  )
+    someData = EventData("it does not", "data text to lambda", time.time() + 1)
+
+    some_lambda_var = 10
+    sch = Schedule() 
+    sch.add(e) 
+    sch.add(e2) 
+    sch.add(e3) 
+    sch.add(e4)
+    sch.add(e5)
+
     #for event in sch.scheduled_events:
     #    print(event.header)
     
