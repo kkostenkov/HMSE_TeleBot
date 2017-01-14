@@ -4,7 +4,6 @@
 # Class should load events to track from file (xml?, json?)
 # Should fire event on it's tracking time
 # Should reschedule itself if it is an repeating event.
-# 
 #
 
 import threading
@@ -29,18 +28,27 @@ class Schedule():
         
     def schedule_loop(self):
         # Check for events to fire
-        self.fire_events()
+        self.check_events()
         # Schedule itself
         t = threading.Timer(self.loop_frequency, self.schedule_loop)
         #t.daemon = True
         t.start()
         
-    def fire_events(self):
+    def check_events(self):
         now = time.time()
-        print(now)
+        print(".")
         for event in self.scheduled_events:
             if event.next_fire_time < now:
-                print("Event fired: %s \n %s" % (event.header, event.message))
+                self.fire_event(event)
+                if event.repeat_interval:
+                    print("Requeued")
+                    event.next_fire_time += event.repeat_interval
+                else:
+                    self.remove(event)
+                
+    def fire_event(self, event):
+        print("%s \n Event fired: %s \n %s" % (time.asctime(), event.header, event.message))
+
 
 
 if __name__ == "__main__":
@@ -48,13 +56,18 @@ if __name__ == "__main__":
     import time
     e = EventData("Caption!",
                   "This is first text notification.",
-                  time.time() + 5, # Seconds
-                  repeating=False)
-    print(e.message)              
+                  time.time() + 2, # Seconds
+                  )
+    e2 = EventData("Re!",
+                  "This is repeating notification.",
+                  time.time() + 3, # Seconds
+                  repeat_interval=2
+                  ) 
     sch = Schedule()
     sch.add(e)
+    sch.add(e2)
     
-    for event in sch.scheduled_events:
-        print(event.header)
+    #for event in sch.scheduled_events:
+    #    print(event.header)
     
     sch.schedule_loop()

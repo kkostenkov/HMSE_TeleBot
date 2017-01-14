@@ -12,11 +12,12 @@ class EventData:
     next_fire_time = None
     
 
-    def __init__(self, header, message, next_fire_time, repeating = False):
+    def __init__(self, header, message, next_fire_time, 
+                 repeat_interval=None, action=None):
         self.header = header
         self.message = message
         self.next_fire_time = next_fire_time
         
-        self.repeating = repeating
-        
+        self.repeat_interval = repeat_interval # seconds
+        self.action = action
 
