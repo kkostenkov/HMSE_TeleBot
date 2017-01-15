@@ -11,10 +11,10 @@ serial_read_frequency = 0.1 # seconds
 status_query_frequency = 10 # seconds
 status_request_command = "r"
 status = {}
-last_statuses = {"doorClosed": 1}
+last_statuses = {"doorClosed": 1, "temp": "Not meashured"}
 
 
-## Testing Purouses ___________________
+## Testing Purposes ___________________
 
 def on_new_status_parsed():
     new_door_closed_status = status.get("doorClosed")
@@ -42,8 +42,7 @@ def parse_serial_message(message):
     # Merge into status
     for key, value in parsed_message.items():
         status[key] = value
-    on_new_status_parsed()
-    
+    on_new_status_parsed()   
 
 def serial_listener_loop(ser):
     print("Serial listener loop launched.")
@@ -79,12 +78,11 @@ def start_serial_port(ser):
 def execute_command(command):
     if (command == "/t"):
         return status["temp"]
-    print("SERIAL STUB HERE")
-    return
-    ser.write(command.encode())
-    response = ser.readline().decode();
-    print(response)
-    return response;
+    print("Serial comand '%s' not implemented." % command)
+    #ser.write(command.encode())
+    #response = ser.readline().decode();
+    #print(response)
+    #return response;
     
 ser = serial.Serial()
 start_serial_port(ser)

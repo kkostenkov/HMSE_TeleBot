@@ -31,8 +31,7 @@ def my_name(message):
 @notify_admins    
 def temperature(message):
     chat_id = message.chat_info.id
-    degrees = serial_talker.execute_command('t')
-    #degrees = 36.6
+    degrees = serial_talker.execute_command("/t")
     text = "Temperature is {}".format(degrees)
     telegramBot[0].sendMessage(chat_id, text)
 
