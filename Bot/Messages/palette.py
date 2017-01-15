@@ -1,5 +1,8 @@
 import os
 from Messages.administration  import notify_admins, authentificate, check_serial_aviability
+
+import Messages.messages
+
 from config import serial_initialized
 from data import users
 from serial_talker import serial_talker
@@ -82,3 +85,11 @@ callbacks = {
             "/webcam" : room_photo,
             }
     
+def message_callback(new_messages):
+    print("______________new message!____________")
+    parser = MessagePasrser()
+    parsed_messages = parser.parse(new_messages)
+    for message in parsed_messages:
+        print ("from: {}{}Message: {}".format( message.from_info.username, os.linesep, message.text))
+        callback = callbacks.get(message.text, default_answer)
+        callback(message)
