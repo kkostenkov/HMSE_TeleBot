@@ -1,6 +1,6 @@
 import json
 
-class MessagePasrser():
+class MessageParser():
     def parse (self, messages):
         # Detect type of incoming data
         if type(messages) == type(dict()): # Single message

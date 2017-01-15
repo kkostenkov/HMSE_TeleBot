@@ -1,7 +1,6 @@
 import os
 from Messages.administration  import notify_admins, authentificate, check_serial_aviability
-
-import Messages.messages
+from Messages.messages import MessageParser
 
 from config import serial_initialized
 from data import users
@@ -87,7 +86,7 @@ callbacks = {
     
 def message_callback(new_messages):
     print("______________new message!____________")
-    parser = MessagePasrser()
+    parser = MessageParser()
     parsed_messages = parser.parse(new_messages)
     for message in parsed_messages:
         print ("from: {}{}Message: {}".format( message.from_info.username, os.linesep, message.text))
