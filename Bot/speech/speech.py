@@ -46,7 +46,7 @@ def ding():
     
 def greet_with_daypart():
     now = time.time()
-    gmtime = time.gmtime(was_last_online)
+    gmtime = time.gmtime()
     h = gmtime.tm_hour
     if (6 <= h < 12):
         say("good_morning")

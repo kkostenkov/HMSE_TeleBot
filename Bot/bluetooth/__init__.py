@@ -24,7 +24,7 @@ class BluetoothWorker():
         t.start()
         
     def do_rollcall(self):
-        #print("getting diff")
+        #print("bt rollcall started")
         for name in self.known_devices:
             mac_id = self.known_devices[name]     
             online = self.check_online(mac_id)
@@ -32,7 +32,7 @@ class BluetoothWorker():
                 self.known_online_hosts.add(name)
             else:
                 self.known_online_hosts.discard(name)
-        #print("refreshed known devices")
+        #print("bt rollcall finished")
         
     def check_online(self, mac_id):
         if os.name == "nt":

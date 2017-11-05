@@ -30,7 +30,7 @@ last_online = {
                "kirill" : 0,
                "vika" : 0,
                }
-max_offline_time = 60 * 120  # seconds              
+max_offline_time = 60 * 60 * 5  # seconds              
 
 def new_mac_found(args):
     mac = tuple(args[0])
@@ -70,6 +70,7 @@ def update_last_online_time(username):
         # Text
         print (text)
         # Voice
+        speech.ding()
         speech.greet_with_daypart()
         speech.say(username)
     last_online[username] = now
