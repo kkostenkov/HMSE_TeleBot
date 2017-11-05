@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 
+# Telegram
 BOT_TOKEN = "122834554:AAGhslxsCbB63iGrEWwCqGA9IhbVxrRcnto"
 server_query_frequency = 60 # in seconds
 
@@ -8,8 +9,12 @@ serial_initialized = False
 
 admins = [ "kiparis87", ]
 
+# Wi-Fi
 ips_to_scan = ["192.168.100." + str(a) for a in range(11)]
 wifi_scan_frequency = 180 # once every %scan_frequency% seconds 
+
+# Bluetoth
+bt_rollcall_freq = 60 * 60 # seconds
 
 def get_serial_port():
     if (os.name == "nt"):

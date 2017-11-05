@@ -8,5 +8,7 @@
 6. sudo apt-get install screen
 
  Run via
-$ screen python3 Bot/bot.py
+$ screen -S HMSE_Telebot python3 Bot/bot.py
+
+Admins can subscribe to bot notifications via /subscribe chat command
 

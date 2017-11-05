@@ -4,6 +4,7 @@ import threading
 import telepot
 
 import lanscan
+import bluetooth
 from Messages import palette
     
 def launch_bot_thread():
@@ -22,7 +23,8 @@ def launch_bot_thread():
 
 from events import HomeEventHandler # don't move this import up
 event_handler = HomeEventHandler()
-lanscan.run_lanscan_loop(event_handler)                             
+#lanscan.run_lanscan_loop(event_handler)                             
+bluetooth.run_worker(event_handler)
 launch_bot_thread()
 
 

@@ -8,6 +8,7 @@ class HomeEventHandler:
     def __init__(self):
         self.register_event("new_mac_found", new_mac_found)
         self.register_event("mac_lost", mac_lost)
+        self.register_event("report_bt_rollcall", process_bt_rollcall)
     
     def register_event(self, name, action):
         #events.add(name, action)
@@ -37,6 +38,25 @@ def new_mac_found(args):
     if (not username):
         #print("Unknown mac appeared")
         return
+    update_last_online_time(username)
+
+
+def mac_lost(args):
+    mac = tuple(args[0])
+    username = known_macs.get(mac, None)    
+    if (not username):
+        #print("Unknown mac lost")
+        return
+    text = username + " lost connection"
+    #speech.ding()
+    print (text)
+    #alarm(text)
+    
+def process_bt_rollcall(bt_users_at_place):
+    for username in bt_users_at_place:
+        update_last_online_time(username)
+
+def update_last_online_time(username):
     was_last_online = last_online[username]
     now = time.time()
     if (was_last_online != 0 and was_last_online < now - max_offline_time ):
@@ -53,15 +73,3 @@ def new_mac_found(args):
         speech.greet_with_daypart()
         speech.say(username)
     last_online[username] = now
-
-def mac_lost(args):
-    mac = tuple(args[0])
-    username = known_macs.get(mac, None)    
-    if (not username):
-        #print("Unknown mac lost")
-        return
-    text = username + " lost connection"
-    #speech.ding()
-    print (text)
-    #alarm(text)
-
