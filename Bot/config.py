@@ -17,3 +17,8 @@ def get_serial_port():
     else:
         port = "/dev/ttyACM0"
     return port
+
+
+# audio
+mp3_player = "mpg321"
+wav_player = "play"

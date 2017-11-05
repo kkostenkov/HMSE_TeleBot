@@ -1,6 +1,7 @@
 import os 
 import subprocess
 import time
+from config import mp3_player, wav_player
 
 base_path = os.path.split(os.path.split(os.path.realpath(__file__))[0])[0] # Two levels up
 resources_path = os.path.join(base_path, "Resources")
@@ -31,7 +32,11 @@ def say(phrase):
         print(file_path)
         return
     else:
-        cmd = ["mpg321", file_path] # adjust volume here
+        if file_path.endswith(".mp3"):
+            packet = mp3_player
+        else:
+            packet = wav_player
+        cmd = [packet, file_path] # adjust volume here
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
         # Wait for file to be played
         p.wait()
