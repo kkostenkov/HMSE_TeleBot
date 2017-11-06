@@ -5,30 +5,11 @@ import serial
 import threading
 import time
 
-from Messages.administration import alarm
-
 serial_read_frequency = 0.1 # seconds
 status_query_frequency = 10 # seconds
 status_request_command = "r"
 status = {}
-last_statuses = {"doorClosed": 1, "temp": "Not meashured"}
-
-
-## Testing Purposes ___________________
-
-def on_new_status_parsed():
-    new_door_closed_status = status.get("doorClosed")
-    if (new_door_closed_status == None): 
-        print("Door info not in status")
-        return
-    if not new_door_closed_status and last_statuses["doorClosed"]:
-        text = "Door opened"
-        print(text)
-        alarm(text)
-    last_statuses["doorClosed"] = new_door_closed_status
-        
-## _____________________________       
-
+event_handler = [None, ]
 
 def parse_serial_message(message):
     if len(message) == 0:
@@ -99,6 +80,32 @@ if config.serial_initialized:
                               )
     worker.setDaemon(True)
     worker.start()
+
+def set_event_handler(new_event_handler):
+    event_handler[0] = new_event_handler
+    
+def on_new_status_parsed():
+    if event_handler[0] is not None:
+        event_handler[0].call("report_serial_status", status)
+
+# testing purposes
+def mock_serial_status():
+    import random, time
+    while True:
+        print("mocking serial")
+        rnd = random.random()
+        if (rnd > 0.5):
+            status = {"doorClosed" : 1}
+        else:
+            status = {"doorClosed" : 0}
+        event_handler[0].call("report_serial_status", status)
+        time.sleep(1)
+
+def run_serial_mocker():
+    worker = threading.Thread(target=mock_serial_status)
+    worker.setDaemon(True)
+    worker.start()
+
 
 if __name__ == "__main__":
     ser.write(b'4')

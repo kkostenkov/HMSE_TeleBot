@@ -9,6 +9,7 @@ class HomeEventHandler:
         self.register_event("new_mac_found", new_mac_found)
         self.register_event("mac_lost", mac_lost)
         self.register_event("report_bt_rollcall", process_bt_rollcall)
+        self.register_event("report_serial_status", process_serial_status)
     
     def register_event(self, name, action):
         #events.add(name, action)
@@ -74,3 +75,17 @@ def update_last_online_time(username):
         speech.greet_with_daypart()
         speech.say(username)
     last_online[username] = now
+    
+
+last_statuses = {"doorClosed": 1, "temp": "Not meashured"}    
+ 
+def process_serial_status(status):
+    new_door_closed_status = status.get("doorClosed")
+    if (new_door_closed_status == None): 
+        print("Door info not in status")
+        return
+    if not new_door_closed_status and last_statuses["doorClosed"]:
+        text = "Door opened"
+        print(text)
+        alarm(text)
+    last_statuses["doorClosed"] = new_door_closed_status
