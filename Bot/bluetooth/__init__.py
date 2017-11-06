@@ -8,7 +8,7 @@ class BluetoothWorker():
     known_online_hosts = set()
     known_devices = {
         "kirill": "74:23:44:A3:24:4E", 
-        "vika": "someaddress",
+        "vika": "D0:81:7A:40:A4:C4",
         }
 
     def __init__(self, event_handler):        
@@ -22,6 +22,11 @@ class BluetoothWorker():
         t = threading.Timer(self.scan_frequency, self.run_main_loop, [event_handler])
         t.daemon = True
         t.start()
+    
+    def rollcall_and_report(self, event_handler):
+        self.do_rollcall()
+        self.report(event_handler)
+        
         
     def do_rollcall(self):
         #print("bt rollcall started")
@@ -47,4 +52,5 @@ class BluetoothWorker():
         event_handler.call("report_bt_rollcall", self.known_online_hosts)
         
 def run_worker(event_handler):
-    BluetoothWorker(event_handler)
+    bt_worker = BluetoothWorker(event_handler)
+    event_handler.set_bt_worker(bt_worker)

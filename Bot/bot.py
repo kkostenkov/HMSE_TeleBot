@@ -27,6 +27,7 @@ event_handler = HomeEventHandler()
 #lanscan.run_lanscan_loop(event_handler)                             
 bluetooth.run_worker(event_handler)
 serial_talker.set_event_handler(event_handler)
+#serial_talker.run_serial_mocker()
 launch_bot_thread()
 
 

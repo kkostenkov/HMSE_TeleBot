@@ -99,7 +99,7 @@ def mock_serial_status():
         else:
             status = {"doorClosed" : 0}
         event_handler[0].call("report_serial_status", status)
-        time.sleep(1)
+        time.sleep(10)
 
 def run_serial_mocker():
     worker = threading.Thread(target=mock_serial_status)
