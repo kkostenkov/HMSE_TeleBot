@@ -19,7 +19,7 @@ def parse_serial_message(message):
     except:
         print("Arduino system message: %s" % message)
         return
-    print (parsed_message)
+    #print (parsed_message)
     # Merge into status
     for key, value in parsed_message.items():
         status[key] = value

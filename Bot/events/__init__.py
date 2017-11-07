@@ -1,5 +1,6 @@
 from Messages.administration import alarm
 from speech import speech
+import config
 import time
 
 class HomeEventHandler:
@@ -24,20 +25,11 @@ class HomeEventHandler:
     def set_bt_worker(self, bt_worker):
         self.bt = bt_worker
 
-
-    known_macs = { 
-                  ("38", "a4", "ed", "05", "bd", "02") : "kirill",
-                  ("f8", "27", "93", "30", "5a", "ca") : "vika",
-                  }
-    last_online = {
-                   "kirill" : 0,
-                   "vika" : 0,
-                   }
-    max_offline_time = 60 * 60 * 5  # seconds              
+    last_online = {}              
 
     def new_mac_found(self, args):
         mac = tuple(args[0])
-        username = self.known_macs.get(mac, None)    
+        username = config.known_macs.get(mac, None)    
         if (not username):
             #print("Unknown mac appeared")
             return
@@ -46,7 +38,7 @@ class HomeEventHandler:
 
     def mac_lost(self, args):
         mac = tuple(args[0])
-        username = self.known_macs.get(mac, None)    
+        username = config.known_macs.get(mac, None)    
         if (not username):
             #print("Unknown mac lost")
             return
@@ -60,9 +52,9 @@ class HomeEventHandler:
             self.update_last_online_time(username)
 
     def update_last_online_time(self, username):
-        was_last_online = self.last_online[username]
+        was_last_online = self.last_online.get(username, 0)
         now = time.time()
-        if (was_last_online != 0 and was_last_online < now - self.max_offline_time ):
+        if (was_last_online != 0 and was_last_online < now - config.max_offline_time ):
             # user was offline for too long. Worth notifying.
             gmtime = time.gmtime(was_last_online)
             human_readable_time = time.asctime(gmtime)

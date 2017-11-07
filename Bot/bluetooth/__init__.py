@@ -6,10 +6,6 @@ import config
 
 class BluetoothWorker():
     known_online_hosts = set()
-    known_devices = {
-        "kirill": "74:23:44:A3:24:4E", 
-        "vika": "D0:81:7A:40:A4:C4",
-        }
 
     def __init__(self, event_handler):        
         self.scan_frequency = config.bt_rollcall_freq
@@ -30,8 +26,8 @@ class BluetoothWorker():
         
     def do_rollcall(self):
         #print("bt rollcall started")
-        for name in self.known_devices:
-            mac_id = self.known_devices[name]     
+        for name in config.known_bt_devices:
+            mac_id = config.known_bt_devices[name]     
             online = self.check_online(mac_id)
             if online:
                 self.known_online_hosts.add(name)
