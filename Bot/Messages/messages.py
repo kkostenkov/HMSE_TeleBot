@@ -14,6 +14,8 @@ class MessageParser():
 class Message():
     class ChatInfo():
         def __init__(self, chat_info):
+            if chat_info is None:
+                return
             self.id = chat_info["id"]
             self.username = chat_info.get("username", "None")
             self.first_name = chat_info.get("first_name", "")
@@ -29,14 +31,18 @@ class Message():
 
     def __init__(self, message):
         self.origin = message
-        #print("_______parsing message_______")
-        #print(message)
-        #print("_______done parsing message_______")
-        self.id = message['message_id']
-        self.date = message['date']
-        self.text = message['text']
-        self.chat_info = self.ChatInfo(message["chat"])
-        self.from_info = self.FromInfo(message["from"])
+        print("_______parsing message_______")
+        print(message)
+        print("_______done parsing message_______")
+        self.id = message.get('message_id', "")
+        self.date = message.get('date', "")
+        self.text = message.get('text', "")
+        self.chat_info = self.ChatInfo(message.get("chat", None))
+        self.from_info = self.FromInfo(message.get("from", None))
+        if "game_short_name" in message:
+           self.text = "/game"
+           self.game_request = message["game_short_name"]
+           self.chat_instance = message["chat_instance"]
         
     def __str__(self):
         return str(self.origin)

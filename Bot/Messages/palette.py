@@ -21,6 +21,11 @@ def time(message):
     text = str(time.time())
     telegramBot[0].sendMessage(chat_id, text)
 
+@notify_admins
+def launch_game(message):
+    game_link = "http://192.168.0.136"
+    telegramBot[0].sendMessage(message.chat_instance, game_link)
+
 @notify_admins    
 def my_name(message):
     chat_id = message.chat_info.id    
@@ -79,6 +84,7 @@ callbacks = {
             "/temperature" : temperature,
             "/test_audio" : test_audio,
             "/time" : time,
+            "/game" : launch_game,
             "/subscribe" : subscribe_to_notifications,
             "/webcam" : room_photo,
             }
@@ -88,6 +94,8 @@ def message_callback(new_messages):
     parser = MessageParser()
     parsed_messages = parser.parse(new_messages)
     for message in parsed_messages:
+        if message is None:
+            continue
         print ("from: {}{}Message: {}".format( message.from_info.username, os.linesep, message.text))
         callback = callbacks.get(message.text, default_answer)
         callback(message)
